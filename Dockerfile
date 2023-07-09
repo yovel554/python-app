@@ -1,11 +1,17 @@
-FROM jenkins/jenkins:latest
+# Use a base image with Python pre-installed
+FROM python:3.9
 
-USER root
+# Set the working directory inside the container
+WORKDIR /app
 
-# Install Python and pip
-RUN apt-get update && apt-get install -y python3 python3-pip
+# Copy the project files to the working directory
+COPY . .
 
-# Install Flask and black
-RUN pip3 install flask black
+# Install project dependencies
+RUN pip install -r requirements.txt
 
-USER jenkins
+# Expose the port on which your Flask app runs (assuming it's 5000)
+EXPOSE 5000
+
+# Specify the command to run your Flask app
+CMD ["python", "app.py"]
