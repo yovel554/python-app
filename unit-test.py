@@ -1,35 +1,34 @@
 import unittest
-from app import validate_username, validate_password
+import json
+from app import app
 
 class RegistrationTests(unittest.TestCase):
 
-    def test_validate_username_valid(self):
-        # Test valid usernames
-        valid_usernames = ["john", "johndoe", "john123"]
-        for username in valid_usernames:
-            result = validate_username(username)
-            self.assertTrue(result)
+    def setUp(self):
+        app.testing = True
+        self.client = app.test_client()
 
-    def test_validate_username_invalid(self):
-        # Test invalid usernames
-        invalid_usernames = ["", " ", "john.doe", "john!123"]
-        for username in invalid_usernames:
-            result = validate_username(username)
-            self.assertFalse(result)
+    def test_registration_successful(self):
+        registration_data = {
+            'username': 'yovel',
+            'password': 'yovel',
+        }
 
-    def test_validate_password_valid(self):
-        # Test valid passwords
-        valid_passwords = ["Password123", "P@ssw0rd", "SecurePassword!"]
-        for password in valid_passwords:
-            result = validate_password(password)
-            self.assertTrue(result)
+        response = self.client.post('/register', json=registration_data)
 
-    def test_validate_password_invalid(self):
-        # Test invalid passwords
-        invalid_passwords = ["password", "12345678", "abcde"]
-        for password in invalid_passwords:
-            result = validate_password(password)
-            self.assertFalse(result)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.decode(), 'User registration successful!')
+
+    def test_missing_fields(self):
+        registration_data = {
+            'username': 'yovel',
+            'password': 'yovel'
+        }
+
+        response = self.client.post('/register', json=registration_data)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data.decode(), 'Missing required fields')
 
 if __name__ == '__main__':
     unittest.main()

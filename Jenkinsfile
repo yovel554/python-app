@@ -9,3 +9,17 @@ pipeline {
         }
     }
 }
+
+
+   stage('Build Docker Image') {
+            steps {
+                // Build the Docker image
+               sh 'docker build -t registration-app .'
+            }
+        }
+   stage('Build Docker Image') {
+            steps {
+                // Build the Docker image
+               sh 'docker build -t registration-app .'
+            }
+        }
