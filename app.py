@@ -8,10 +8,15 @@ def home():
 
 @app.route('/register', methods=['POST'])
 def register():
-    username = request.form['username']
-    password = request.form['password']
-    print(f"New user registered - Username: {username}, Password: {password}")
-    return "Registration successful!"
+    username = request.form.get('username')
+    password = request.form.get('password')
+    email = request.form.get('email')
+
+    if username and password and email:
+        # Register logic goes here
+        return 'User registration successful!'
+    else:
+        return 'Missing required fields', 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
